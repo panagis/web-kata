@@ -26,6 +26,17 @@ namespace ProductsApi.Store
             return _mProducts.Exists(p => p.Name == name) ? _mProducts.Single(p => p.Name == name) : null;
         }
 
+        public bool Update(Product p) {
+            var product = GetByName(p.Name);
+            if (product == null) {
+                return false;
+            }
+            _mProducts.Remove(product);
+            Add(p);
+
+            return true;
+        }
+
         public void Add(Product product)
         {
             _mProducts.Add(product);

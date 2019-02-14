@@ -61,5 +61,12 @@ namespace ProductsApi.Controllers
             return Ok(name);
         }
 
+        [HttpPut]
+        public IActionResult Put([FromBody] Product value)
+        {
+            return _mProductStore.Update(value) 
+                ? Ok(value) 
+                : StatusCode(StatusCodes.Status404NotFound, value);
+        }
     }
 }
