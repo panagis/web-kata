@@ -48,5 +48,18 @@ namespace ProductsApi.Controllers
 
             return Created("api/Products", value);
         }
+
+        [HttpDelete]
+        public IActionResult Delete(string name)
+        {
+             if (String.IsNullOrWhiteSpace(name) || _mProductStore.GetByName(name) == null) {
+                return StatusCode(StatusCodes.Status404NotFound, name);
+            }
+
+            _mProductStore.Delete(name);
+
+            return Ok(name);
+        }
+
     }
 }
