@@ -19,9 +19,18 @@ namespace ProductsApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Product> Get(string name)
+        public IActionResult Get(string name)
         {
-            return name == null ? _mProductStore.GetAll() : new List<Product>() {_mProductStore.GetByName(name)};
+            if (name == null) {
+                return Ok(_mProductStore.GetAll());
+            }
+
+            if (String.IsNullOrWhiteSpace(name)) {
+                return StatusCode(StatusCodes.Status404NotFound, name);
+            }
+
+            var product =_mProductStore.GetByName(name);
+            return product == null ? StatusCode(StatusCodes.Status404NotFound, name) : Ok(product);
         }
 
         [HttpPost]
