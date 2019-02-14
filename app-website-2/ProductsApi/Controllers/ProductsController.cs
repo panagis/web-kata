@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ProductsApi.Model;
 using ProductsApi.Store;
@@ -19,13 +21,23 @@ namespace ProductsApi.Controllers
         [HttpGet]
         public IEnumerable<Product> Get(string name)
         {
-            return name == null ? _mProductStore.GetAll() : _mProductStore.GetByName(name);
+            return name == null ? _mProductStore.GetAll() : new List<Product>() {_mProductStore.GetByName(name)};
         }
 
         [HttpPost]
-        public void Post([FromBody] Product value)
+        public IActionResult Post([FromBody] Product value)
         {
+            if (String.IsNullOrWhiteSpace(value.Name)) {
+                return StatusCode(StatusCodes.Status404NotFound, value);
+            }
+
+            if (_mProductStore.GetByName(value.Name) != null) {
+                return StatusCode(StatusCodes.Status409Conflict, value);
+            }
+
             _mProductStore.Add(value);
+
+            return Created("api/Products", value);
         }
     }
 }
