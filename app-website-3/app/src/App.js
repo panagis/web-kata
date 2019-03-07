@@ -4,12 +4,17 @@ import { Route } from 'react-router-dom'
 import ProductMenu from './ProductMenu.js'
 import ProductContainer from './ProductContainer.js'
 import './App.css'
+import { fetchAllProducts } from './modules/Products.js';
 
 class App extends Component {
 
   constructor(props) {
     super(props)
     this.state = { products: [] }
+  }
+
+  componentDidMount() {
+    fetchAllProducts().then(products => this.setState({ products: products }));
   }
 
   render() {

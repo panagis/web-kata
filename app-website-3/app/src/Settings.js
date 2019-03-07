@@ -1,0 +1,1 @@
+export const ApiBasePath = "http://localhost:1785/api"
