@@ -4,7 +4,7 @@ class ProductForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { newProductName: "", newProductDescription: "", newProductAlreadyExists: false };
+        this.state = { newProductName: "", newProductDescription: "", newProductAlreadyExists: false, error: "" };
     }
 
     handleNewProductNameChange = (e) => {
@@ -28,10 +28,12 @@ class ProductForm extends Component {
 
         if (newProductAlreadyExists) {
             this.props.updateProduct(newProductName, newProductDescription)
-                .then(() => this.props.fetchAllProducts());
+                .then(() => this.props.fetchAllProducts())
+                .then(() => this.clearFields());
         } else {
             this.props.addNewProduct(newProductName, newProductDescription)
-                .then(() => this.props.fetchAllProducts());
+                .then(() => this.props.fetchAllProducts())
+                .then(() => this.clearFields());
         }
 
         e.preventDefault();
@@ -39,11 +41,17 @@ class ProductForm extends Component {
 
     handleDeleteProduct = () => {
         this.props.deleteProduct(this.state.newProductName)
-            .then(() => this.props.fetchAllProducts());
+            .then(() => this.props.fetchAllProducts())
+            .then(() => this.clearFields());
+    }
+
+    clearFields = () => {
+        this.setState({ newProductName: "", newProductDescription: ""});
     }
 
     render() {
         return <React.Fragment>
+            {this.state.error}
             <h3>Add new product</h3>
             <form onSubmit={this.handleAddProductSubmit}>
                 <label>
@@ -55,8 +63,8 @@ class ProductForm extends Component {
                 <input type="test" value={this.state.newProductDescription} onChange={this.handleNewProductDescriptionChange} />
                 </label>
                 <input type="submit" value={this.state.newProductAlreadyExists ? "Update" : "Create"} />
-                <button onClick={this.handleDeleteProduct}>Delete</button>
             </form>
+            <button onClick={this.handleDeleteProduct}>Delete</button>
         </React.Fragment>
     }
 }
