@@ -14,7 +14,7 @@ export function addNewProduct(name, description) {
             headers: {
                 "Content-Type": "application/json; charset=utf-8"
             },
-            body: JSON.stringify({Name: name, Description: description})
+            body: JSON.stringify({ Name: name, Description: description })
         })
 }
 
@@ -25,6 +25,13 @@ export function updateProduct(name, description) {
             headers: {
                 "Content-Type": "application/json; charset=utf-8"
             },
-            body: JSON.stringify({Name: name, Description: description})
+            body: JSON.stringify({ Name: name, Description: description })
+        })
+}
+
+export function deleteProduct(name) {
+    return fetch(ApiBasePath + "/" + productsPath + "?name=" + name,
+        {
+            method: "DELETE"
         })
 }

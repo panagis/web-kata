@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom'
 import ProductMenu from './ProductMenu.js'
 import ProductContainer from './ProductContainer.js'
 import './App.css'
-import { fetchAllProducts, addNewProduct, updateProduct } from './modules/Products.js';
+import { fetchAllProducts, addNewProduct, updateProduct, deleteProduct } from './modules/Products.js';
 import ProductForm from './ProductForm.js';
 
 class App extends Component {
@@ -14,16 +14,12 @@ class App extends Component {
     this.state = { products: [] }
   }
 
-  fetchAllProductsAndUpdateState = () => {
-    fetchAllProducts().then(products => this.setState({ products: products }));
-  }
-
   componentDidMount() {
-    this.fetchAllProductsAndUpdateState();
+    this.fetchAllProducts();
   }
 
-  componentDidUpdate() {
-    this.fetchAllProductsAndUpdateState();
+  fetchAllProducts = () => {
+    fetchAllProducts().then(products => this.setState({ products: products }));
   }
 
   render() {
@@ -32,7 +28,12 @@ class App extends Component {
         <h2>Redgate products</h2>
       </div>
       <div className='products-add-product'>
-        <ProductForm addNewProduct={addNewProduct} updateProduct={updateProduct} products={this.state.products} />
+        <ProductForm
+          addNewProduct={addNewProduct}
+          updateProduct={updateProduct}
+          deleteProduct={deleteProduct}
+          fetchAllProducts={this.fetchAllProducts}
+          products={this.state.products} />
       </div>
       <div className='products-container'>
         <ProductMenu products={this.state.products} />

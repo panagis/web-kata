@@ -27,12 +27,19 @@ class ProductForm extends Component {
         const { newProductName, newProductDescription, newProductAlreadyExists } = this.state;
 
         if (newProductAlreadyExists) {
-            this.props.updateProduct(newProductName, newProductDescription);
+            this.props.updateProduct(newProductName, newProductDescription)
+                .then(() => this.props.fetchAllProducts());
         } else {
-            this.props.addNewProduct(newProductName, newProductDescription);
+            this.props.addNewProduct(newProductName, newProductDescription)
+                .then(() => this.props.fetchAllProducts());
         }
 
         e.preventDefault();
+    }
+
+    handleDeleteProduct = () => {
+        this.props.deleteProduct(this.state.newProductName)
+            .then(() => this.props.fetchAllProducts());
     }
 
     render() {
@@ -48,6 +55,7 @@ class ProductForm extends Component {
                 <input type="test" value={this.state.newProductDescription} onChange={this.handleNewProductDescriptionChange} />
                 </label>
                 <input type="submit" value={this.state.newProductAlreadyExists ? "Update" : "Create"} />
+                <button onClick={this.handleDeleteProduct}>Delete</button>
             </form>
         </React.Fragment>
     }
