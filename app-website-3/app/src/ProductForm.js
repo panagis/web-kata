@@ -4,11 +4,19 @@ class ProductForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { newProductName: "", newProductDescription: "" };
+        this.state = { newProductName: "", newProductDescription: "", newProductAlreadyExists: false };
     }
 
     handleNewProductNameChange = (e) => {
-        this.setState({ newProductName: e.target.value });
+        const productName = e.target.value;
+        this.setState({ newProductName: productName });
+
+        const products = this.props.products;
+        if (products.find(p => p.name === productName)) {
+            this.setState({ newProductAlreadyExists: true });
+        } else if (this.state.newProductAlreadyExists === true) {
+            this.setState({ newProductAlreadyExists: false });
+        }
     }
 
     handleNewProductDescriptionChange = (e) => {
@@ -16,8 +24,14 @@ class ProductForm extends Component {
     }
 
     handleAddProductSubmit = (e) => {
-        const { newProductName, newProductDescription } = this.state;
-        this.props.addNewProduct(newProductName, newProductDescription);
+        const { newProductName, newProductDescription, newProductAlreadyExists } = this.state;
+
+        if (newProductAlreadyExists) {
+            this.props.updateProduct(newProductName, newProductDescription);
+        } else {
+            this.props.addNewProduct(newProductName, newProductDescription);
+        }
+
         e.preventDefault();
     }
 
@@ -33,7 +47,7 @@ class ProductForm extends Component {
                     Description:
                 <input type="test" value={this.state.newProductDescription} onChange={this.handleNewProductDescriptionChange} />
                 </label>
-                <input type="submit" value="Submit" />
+                <input type="submit" value={this.state.newProductAlreadyExists ? "Update" : "Create"} />
             </form>
         </React.Fragment>
     }

@@ -17,3 +17,14 @@ export function addNewProduct(name, description) {
             body: JSON.stringify({Name: name, Description: description})
         })
 }
+
+export function updateProduct(name, description) {
+    return fetch(ApiBasePath + "/" + productsPath,
+        {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json; charset=utf-8"
+            },
+            body: JSON.stringify({Name: name, Description: description})
+        })
+}

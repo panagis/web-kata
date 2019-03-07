@@ -4,8 +4,8 @@ import { Route } from 'react-router-dom'
 import ProductMenu from './ProductMenu.js'
 import ProductContainer from './ProductContainer.js'
 import './App.css'
-import { fetchAllProducts, addNewProduct } from './modules/Products.js';
-import AddProductForm from './ProductForm.js';
+import { fetchAllProducts, addNewProduct, updateProduct } from './modules/Products.js';
+import ProductForm from './ProductForm.js';
 
 class App extends Component {
 
@@ -32,7 +32,7 @@ class App extends Component {
         <h2>Redgate products</h2>
       </div>
       <div className='products-add-product'>
-        <AddProductForm addNewProduct={addNewProduct} />
+        <ProductForm addNewProduct={addNewProduct} updateProduct={updateProduct} products={this.state.products} />
       </div>
       <div className='products-container'>
         <ProductMenu products={this.state.products} />
