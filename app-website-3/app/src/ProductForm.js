@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { addNewProduct } from './modules/Products';
 
 class ProductForm extends Component {
     constructor(props) {
@@ -18,7 +17,7 @@ class ProductForm extends Component {
 
     handleAddProductSubmit = (e) => {
         const { newProductName, newProductDescription } = this.state;
-        addNewProduct(newProductName, newProductDescription);
+        this.props.addNewProduct(newProductName, newProductDescription);
         e.preventDefault();
     }
 
