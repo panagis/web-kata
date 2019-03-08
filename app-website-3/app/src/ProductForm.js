@@ -4,7 +4,12 @@ class ProductForm extends Component {
     constructor(props) {
         super(props);
 
-        this.state = { newProductName: "", newProductDescription: "", newProductAlreadyExists: false, error: "" };
+        this.state = {
+            newProductName: "",
+            newProductDescription: "",
+            newProductAlreadyExists: false,
+            errorMessage: ""
+        };
     }
 
     handleNewProductNameChange = (e) => {
@@ -29,11 +34,13 @@ class ProductForm extends Component {
         if (newProductAlreadyExists) {
             this.props.updateProduct(newProductName, newProductDescription)
                 .then(() => this.props.fetchAllProducts())
-                .then(() => this.clearFields());
+                .then(() => this.clearFields())
+                .catch(error => this.setErrorMessage(error));
         } else {
             this.props.addNewProduct(newProductName, newProductDescription)
                 .then(() => this.props.fetchAllProducts())
-                .then(() => this.clearFields());
+                .then(() => this.clearFields())
+                .catch(error => this.setErrorMessage(error));
         }
 
         e.preventDefault();
@@ -42,16 +49,20 @@ class ProductForm extends Component {
     handleDeleteProduct = () => {
         this.props.deleteProduct(this.state.newProductName)
             .then(() => this.props.fetchAllProducts())
-            .then(() => this.clearFields());
+            .then(() => this.clearFields())
+            .catch(error => this.setErrorMessage(error));
     }
 
     clearFields = () => {
-        this.setState({ newProductName: "", newProductDescription: ""});
+        this.setState({ newProductName: "", newProductDescription: "" });
+    }
+
+    setErrorMessage = (errorMessage) => {
+        this.setState({ errorMessage: errorMessage });
     }
 
     render() {
         return <React.Fragment>
-            {this.state.error}
             <h3>Add new product</h3>
             <form onSubmit={this.handleAddProductSubmit}>
                 <label>
@@ -65,6 +76,7 @@ class ProductForm extends Component {
                 <input type="submit" value={this.state.newProductAlreadyExists ? "Update" : "Create"} />
             </form>
             <button onClick={this.handleDeleteProduct}>Delete</button>
+            {this.state.errorMessage && <p>Error code: {this.state.errorMessage}</p>}
         </React.Fragment>
     }
 }
